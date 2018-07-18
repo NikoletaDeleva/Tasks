@@ -1,0 +1,36 @@
+package com.egtinteractive.data_structures.list_tests;
+
+import static org.testng.Assert.assertEquals;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.egtinteractive.data_structures.list.ArrayList;
+import com.egtinteractive.data_structures.list.LinkedList;
+import com.egtinteractive.data_structures.list.List;
+
+public class RemoveTest extends TestList {
+    @DataProvider(name = "lists")
+    public Object[][] createData() {
+	return new Object[][] { { new ArrayList<>() }, { new LinkedList<>() }, };
+    }
+
+    @Test(dataProvider = "lists")
+    public void removeElelmentAndSizeDecrase(final List<Integer> list) {
+	final int size = ThreadLocalRandom.current().nextInt(1,100);
+
+	fillListWithIntegers(size, list);
+
+	final int sizeBeforeRemoveElement = list.size();
+
+	list.remove(list.get(ThreadLocalRandom.current().nextInt(0,size)));
+
+	final int sizeAfterRemoving = list.size();
+	final int expectedSize = sizeBeforeRemoveElement - 1;
+
+	assertEquals(sizeAfterRemoving, expectedSize);
+    }
+    
+}
