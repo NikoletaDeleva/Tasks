@@ -65,7 +65,7 @@ public class ListAddByIndexTest extends TestList{
     public void addNullValueShouldContainsNull(final List<Integer> list) {
 	list.add(ThreadLocalRandom.current().nextInt());
 	list.add(ThreadLocalRandom.current().nextInt());
-	list.add(2, null);
+	list.add(1, null);
 
 	assertTrue(list.contains(null));
     }
@@ -74,7 +74,7 @@ public class ListAddByIndexTest extends TestList{
     public void addNullStringShouldContainsNull(final List<String> list) {
 	list.add(UUID.randomUUID().toString());
 	list.add(UUID.randomUUID().toString());
-	list.add(2, null);
+	list.add(1, null);
 
 	assertTrue(list.contains(null));
     }

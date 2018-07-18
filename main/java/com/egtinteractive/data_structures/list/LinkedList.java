@@ -1,6 +1,7 @@
 package com.egtinteractive.data_structures.list;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
@@ -96,23 +97,25 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-	if (index > this.size) {
-	    throw new RuntimeException("No such position");
+	if (index >= this.size || index < 0) {
+	    throw new RuntimeException("No such index");
 	} else {
 	    if (index == this.size) {
-		this.add(element);
+		add(element);
+	    } else if (index == 0) {
+		final Node<T> newNode = new Node<T>(element, null);
+		head.previos = newNode;
+		head = newNode;
 	    } else {
 		Node<T> current = this.head;
-
 		current = iterateLinkedList(index, current);
-
 		final Node<T> newNode = new Node<T>(element, current.previos);
-		if (current.previos != null) {
-		    current.previos.next = newNode;
-		}
+		current.previos = newNode;
+		current.previos.next = newNode;
 		newNode.next = current;
-		this.size++;
+
 	    }
+	    this.size++;
 	}
     }
 
@@ -199,6 +202,7 @@ public class LinkedList<T> implements List<T> {
     public Iterator<T> iterator() {
 	final Iterator<T> iterator = new Iterator<T>() {
 	    private Node<T> current = head;
+	    private int previous = 0;
 
 	    @Override
 	    public boolean hasNext() {
@@ -210,9 +214,16 @@ public class LinkedList<T> implements List<T> {
 		if (hasNext()) {
 		    T data = current.data;
 		    current = current.next;
+		    previous++;
 		    return data;
 		}
-		return null;
+		throw new NoSuchElementException("No such element!");
+	    }
+
+	    @Override
+	    public void remove() {
+		LinkedList.this.remove(--previous);
+		size--;
 	    }
 
 	};
@@ -242,17 +253,12 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public int hashCode() {
-	int hashCode = size;
 	Iterator<T> itr = iterator();
-	int pos = size();
-	while (--pos >= 0) {
-	    final T next = itr.next();
-	    if (next != null) {
-		hashCode = 31 * hashCode + next.hashCode();
-	    }
-
+	int hash = 0;
+	while (itr.hasNext()) {
+	    hash = Objects.hashCode(itr.next());
 	}
-	return hashCode;
+	return 7 * Objects.hashCode(size) + 11 * hash;
     }
 
 }

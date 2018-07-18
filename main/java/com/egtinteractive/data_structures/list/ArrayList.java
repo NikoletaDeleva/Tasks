@@ -106,10 +106,12 @@ public class ArrayList<T> implements List<T> {
     @Override
     public boolean remove(int index) {
 	indexValidation(index);
-	for (int pos = index; pos < size; pos++) {
-	    this.array[pos] = array[pos + 1];
+	if(index != --size) {
+	    for (int pos = index; pos < size; pos++) {
+		this.array[pos] = array[pos + 1];
+	    }
 	}
-	this.array[--size] = null;
+	this.array[size] = null;
 	return true;
     }
 
@@ -194,17 +196,12 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int hashCode() {
-	int hashCode = size;
 	Iterator<T> itr = iterator();
-	int pos = size();
-	while (--pos >= 0) {
-	    final T next = itr.next();
-	    if (next != null) {
-		hashCode = 31 * hashCode + next.hashCode();
-	    }
-
+	int hash =0;
+	while (itr.hasNext()) {
+	    hash = Objects.hashCode(itr.next());
 	}
-	return hashCode;
+	return 7 * Objects.hashCode(size) + 11 * hash;
     }
 
 }
