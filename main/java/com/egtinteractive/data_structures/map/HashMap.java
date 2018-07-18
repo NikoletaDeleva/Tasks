@@ -1,6 +1,5 @@
 package com.egtinteractive.data_structures.map;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -292,25 +291,45 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + size;
-	result = prime * result + Arrays.hashCode(table);
-	return result;
+	Iterator<Node<K, V>> itr = iterator();
+	int hash = 0;
+	while (itr.hasNext()) {
+	    hash = Objects.hashCode(itr.next().key) + Objects.hashCode(itr.next().value);
+	}
+	return 7 * Objects.hashCode(size) + 11 * hash;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
+	if (this == obj) {
 	    return true;
-	if (obj == null)
+	}
+	if (obj == null) {
 	    return false;
-	if (getClass() != obj.getClass())
+	}
+	if (!(obj instanceof HashMap)) {
 	    return false;
-	HashMap<K, V> other = (HashMap<K, V>) obj;
-	if (size != other.size)
+	}
+
+	HashMap<K, V> newMap = (HashMap<K, V>) obj;
+	if (size != newMap.size) {
 	    return false;
-	return true;
+	}
+
+	boolean check = true;
+
+	Iterator<Node<K, V>> newItr = newMap.iterator();
+
+	while (newItr.hasNext()) {
+	    if (this.containsKey((K) newItr.next().key) && (containsValue((V) newItr.next().value))) {
+		check = true;
+	    } else {
+		check = false;
+	    }
+	}
+
+	return check;
+
     }
 }
