@@ -21,10 +21,6 @@ public class PutTest extends TestMap {
 	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
 	
 	fillMap(map, randSize);
-	
-	for(int index = 0; index < randSize; index++) {
-	    final String valueAtPosition = map.get(index);
-	    assertEquals(valueAtPosition, index +"" );
-	}
+
     }
 }

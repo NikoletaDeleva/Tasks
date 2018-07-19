@@ -2,6 +2,7 @@ package com.egtinteractive.data_structures.map_tests;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -45,7 +46,7 @@ public class GetTest extends TestMap {
 	
 	final String realValue = map.get(null);
 	
-	assertNull(realValue);
+	assertTrue(realValue == null);
     }
     
 }

@@ -3,6 +3,8 @@ package com.egtinteractive.data_structures.map;
 import java.util.Iterator;
 import java.util.Objects;
 
+import com.egtinteractive.data_structures.map.HashMap.Node;
+
 public class HashMap<K, V> implements Map<K, V> {
     // -------------Fields
     private static final int DEFAULT_CAPACITY = 16;
@@ -13,7 +15,7 @@ public class HashMap<K, V> implements Map<K, V> {
     private Node<K, V>[] table;
 
     // -------------
-    
+
     // ------------- Node Inner class
     static class Node<K, V> {
 	private final K key;
@@ -45,7 +47,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     // -------------
-    
+
     // ------------- Constructors
     public HashMap() {
 	this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -72,10 +74,14 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     // -------------
-    
+
     // ------------- Private Methods
     private int hash(K key) {
-	return key.hashCode() % table.length;
+	if (key == null) {
+	    return 0;
+	} else {
+	    return key.hashCode() % table.length;
+	}
     }
 
     private void checkSize() {
@@ -171,10 +177,6 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(K key) {
-	if (key == null) {
-	    throw new NullPointerException("Null key value!");
-	}
-
 	int hash = hash(key);
 
 	if (table[hash] == null) {
@@ -305,7 +307,14 @@ public class HashMap<K, V> implements Map<K, V> {
 	Iterator<Node<K, V>> itr = iterator();
 	int hash = 0;
 	while (itr.hasNext()) {
-	    hash = Objects.hashCode(itr.next().key) + Objects.hashCode(itr.next().value);
+	    Node<K, V> next = itr.next();
+	    K nextKey = next.key;
+	    V nextValue = next.value;
+	    if (nextKey == null) {
+		
+	    }
+	    
+	    hash = Objects.hashCode(next.key) + Objects.hashCode(next.value);
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
