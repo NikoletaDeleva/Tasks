@@ -6,7 +6,6 @@ import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
 
-    // ------------- Node Inner Class
     @SuppressWarnings({ "unused" })
     private static class Node<T> {
 	private T data;
@@ -59,20 +58,14 @@ public class LinkedList<T> implements List<T> {
 	}
 
     }
-    // -------------
 
-    // -------------Fields
     private int size = 0;
     private Node<T> head;
     private Node<T> tail;
-    // -------------
 
-    // -------------Constructor
     public LinkedList() {
     }
-    // -------------
 
-    // ------------- Private Methods
     private void indexValidation(int index) {
 	if (index < 0 || index >= size) {
 	    throw new IndexOutOfBoundsException("There is no such index in that ArrayList!");
@@ -85,9 +78,6 @@ public class LinkedList<T> implements List<T> {
 	}
 	return current;
     }
-    // -------------
-
-    // ------------- Methods from Interface
 
     @Override
     public T get(int index) {
@@ -167,15 +157,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean contains(T element) {
-	if (this.size != 0) {
-	    for (int pos = 0; pos < size; pos++) {
-		T currentNode = get(pos);
-		if (Objects.equals(currentNode, element)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+	return indexOf(element) != -1;
     }
 
     @Override
@@ -243,11 +225,14 @@ public class LinkedList<T> implements List<T> {
 	if (!(o instanceof List))
 	    return false;
 	int size = size();
-	if (size != ((List<?>) o).size())
+
+	@SuppressWarnings("unchecked")
+	List<T> temp = (List<T>) o;
+	if (size != temp.size())
 	    return false;
 
 	Iterator<T> itr1 = iterator();
-	Iterator<?> itr2 = ((LinkedList<?>) o).iterator();
+	Iterator<?> itr2 = temp.iterator();
 
 	while (--size >= 0) {
 	    if (!Objects.equals(itr1.next(), itr2.next())) {
@@ -266,5 +251,4 @@ public class LinkedList<T> implements List<T> {
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
-    // -------------
 }

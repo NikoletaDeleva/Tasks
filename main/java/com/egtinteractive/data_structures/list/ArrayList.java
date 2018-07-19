@@ -5,13 +5,11 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
-    // ------------- Fields
+
     private T[] array;
     private int size = 0;
     public static final int DEFAULT_SIZE = 20;
-    // -------------
 
-    // -------------Constructors
     @SuppressWarnings("unchecked")
     public ArrayList() {
 	this.array = (T[]) new Object[DEFAULT_SIZE];
@@ -21,9 +19,7 @@ public class ArrayList<T> implements List<T> {
     public ArrayList(int size) {
 	this.array = (T[]) new Object[size];
     }
-    // -------------
 
-    // -------------Private Methods
     private void checkCapacity() {
 	if (this.size < this.array.length) {
 	    return;
@@ -61,9 +57,7 @@ public class ArrayList<T> implements List<T> {
 	}
 	return -1;
     }
-    // -------------
 
-    // ------------- Methods from Interface
     @Override
     public T get(int index) {
 	indexValidation(index);
@@ -186,11 +180,14 @@ public class ArrayList<T> implements List<T> {
 	if (!(o instanceof List))
 	    return false;
 	int size = size();
-	if (size != ((List<?>) o).size())
+	
+	@SuppressWarnings("unchecked")
+	List<T> temp = (List<T>) o;
+	if (size != temp.size())
 	    return false;
 
 	Iterator<T> itr1 = iterator();
-	Iterator<?> itr2 = ((ArrayList<?>) o).iterator();
+	Iterator<?> itr2 = temp.iterator();
 
 	while (--size >= 0) {
 	    if (!Objects.equals(itr1.next(), itr2.next())) {
@@ -210,5 +207,5 @@ public class ArrayList<T> implements List<T> {
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
-    // -------------
+
 }

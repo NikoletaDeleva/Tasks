@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class HashMap<K, V> implements Map<K, V> {
-    // -------------Fields
+
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private int size;
@@ -12,9 +12,6 @@ public class HashMap<K, V> implements Map<K, V> {
     private final float loadFactor;
     private Node<K, V>[] table;
 
-    // -------------
-
-    // ------------- Node Inner class
     static class Node<K, V> {
 	private final K key;
 	private V value;
@@ -44,9 +41,6 @@ public class HashMap<K, V> implements Map<K, V> {
 
     }
 
-    // -------------
-
-    // ------------- Constructors
     public HashMap() {
 	this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
@@ -71,14 +65,11 @@ public class HashMap<K, V> implements Map<K, V> {
 	}
     }
 
-    // -------------
-
-    // ------------- Private Methods
     private int hash(K key) {
 	if (key == null) {
 	    return 0;
 	} else {
-	    return key.hashCode() & (table.length-1);
+	    return key.hashCode() & (table.length - 1);
 	}
     }
 
@@ -143,9 +134,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	    previous.next = newNode;
 	}
     }
-    // -------------
 
-    // ------------- Methods from Interface
     @Override
     public V get(K key) {
 	int hash = hash(key);
@@ -327,7 +316,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
 
-    @SuppressWarnings("unchecked")
+
     @Override
     public boolean equals(Object obj) {
 	if (this == obj) {
@@ -340,6 +329,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	    return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	HashMap<K, V> newMap = (HashMap<K, V>) obj;
 	if (size != newMap.size) {
 	    return false;
@@ -356,9 +346,6 @@ public class HashMap<K, V> implements Map<K, V> {
 		check = false;
 	    }
 	}
-
 	return check;
-
     }
-    // -------------
 }
