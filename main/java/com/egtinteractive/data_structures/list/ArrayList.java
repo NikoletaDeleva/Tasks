@@ -5,10 +5,13 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
+    // ------------- Fields
     private T[] array;
     private int size = 0;
     public static final int DEFAULT_SIZE = 20;
+    // -------------
 
+    // -------------Constructors
     @SuppressWarnings("unchecked")
     public ArrayList() {
 	this.array = (T[]) new Object[DEFAULT_SIZE];
@@ -18,7 +21,9 @@ public class ArrayList<T> implements List<T> {
     public ArrayList(int size) {
 	this.array = (T[]) new Object[size];
     }
+    // -------------
 
+    // -------------Private Methods
     private void checkCapacity() {
 	if (this.size < this.array.length) {
 	    return;
@@ -56,7 +61,9 @@ public class ArrayList<T> implements List<T> {
 	}
 	return -1;
     }
+    // -------------
 
+    // ------------- Methods from Interface
     @Override
     public T get(int index) {
 	indexValidation(index);
@@ -79,9 +86,9 @@ public class ArrayList<T> implements List<T> {
 	} else {
 	    this.size++;
 	    this.checkCapacity();
-	    for (int position = this.size - 1; position >= index; position--) {
-		if (position != 0) {
-		    this.array[position + 1] = this.array[position];
+	    for (int pos = this.size - 1; pos >= index; pos--) {
+		if (pos != 0) {
+		    this.array[pos + 1] = this.array[pos];
 		}
 	    }
 	    this.array[index] = element;
@@ -106,7 +113,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public boolean remove(int index) {
 	indexValidation(index);
-	if(index != --size) {
+	if (index != --size) {
 	    for (int pos = index; pos < size; pos++) {
 		this.array[pos] = array[pos + 1];
 	    }
@@ -197,11 +204,11 @@ public class ArrayList<T> implements List<T> {
     @Override
     public int hashCode() {
 	Iterator<T> itr = iterator();
-	int hash =0;
+	int hash = 0;
 	while (itr.hasNext()) {
 	    hash = Objects.hashCode(itr.next());
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
-
+    // -------------
 }

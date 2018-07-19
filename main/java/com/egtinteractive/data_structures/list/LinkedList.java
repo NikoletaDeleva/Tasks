@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
 
+    // ------------- Node Inner Class
     @SuppressWarnings({ "unused" })
     private static class Node<T> {
 	private T data;
@@ -58,22 +59,24 @@ public class LinkedList<T> implements List<T> {
 	}
 
     }
+    // -------------
 
+    // -------------Fields
     private int size = 0;
     private Node<T> head;
     private Node<T> tail;
+    // -------------
 
+    // -------------Constructor
     public LinkedList() {
     }
+    // -------------
 
-    @Override
-    public T get(int index) {
-	if (index >= this.size) {
-	    throw new RuntimeException("No such element");
+    // ------------- Private Methods
+    private void indexValidation(int index) {
+	if (index < 0 || index >= size) {
+	    throw new IndexOutOfBoundsException("There is no such index in that ArrayList!");
 	}
-	Node<T> current = this.head;
-	current = iterateLinkedList(index, current);
-	return (T) current.data;
     }
 
     private Node<T> iterateLinkedList(int index, Node<T> current) {
@@ -81,6 +84,17 @@ public class LinkedList<T> implements List<T> {
 	    current = current.next;
 	}
 	return current;
+    }
+    // -------------
+
+    // ------------- Methods from Interface
+
+    @Override
+    public T get(int index) {
+	indexValidation(index);
+	Node<T> current = this.head;
+	current = iterateLinkedList(index, current);
+	return (T) current.data;
     }
 
     @Override
@@ -97,37 +111,32 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-	if (index >= this.size || index < 0) {
-	    throw new RuntimeException("No such index");
-	} else {
-	    if (index == this.size) {
-		add(element);
-	    } else if (index == 0) {
-		final Node<T> newNode = new Node<T>(element, null);
-		head.previos = newNode;
-		head = newNode;
-	    } else {
-		Node<T> current = this.head;
-		current = iterateLinkedList(index, current);
-		final Node<T> newNode = new Node<T>(element, current.previos);
-		current.previos = newNode;
-		current.previos.next = newNode;
-		newNode.next = current;
+	indexValidation(index);
 
-	    }
-	    this.size++;
+	if (index == this.size) {
+	    add(element);
+	} else if (index == 0) {
+	    final Node<T> newNode = new Node<T>(element, null);
+	    head.previos = newNode;
+	    head = newNode;
+	} else {
+	    Node<T> current = this.head;
+	    current = iterateLinkedList(index, current);
+	    final Node<T> newNode = new Node<T>(element, current.previos);
+	    current.previos = newNode;
+	    current.previos.next = newNode;
+	    newNode.next = current;
+
 	}
+	this.size++;
     }
 
     @Override
     public void set(int index, T element) {
-	if (index >= this.size || index < 0) {
-	    throw new RuntimeException("No such index");
-	} else {
-	    Node<T> current = head;
-	    current = iterateLinkedList(index, current);
-	    current.data = element;
-	}
+	indexValidation(index);
+	Node<T> current = head;
+	current = iterateLinkedList(index, current);
+	current.data = element;
     }
 
     @Override
@@ -141,22 +150,19 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean remove(int index) {
-	if (index >= this.size || index < 0) {
-	    throw new RuntimeException("No such index");
-	} else {
-	    Node<T> current = head;
-	    current = iterateLinkedList(index, current);
+	indexValidation(index);
+	Node<T> current = head;
+	current = iterateLinkedList(index, current);
 
-	    if (current.next != null && current.previos != null) {
-		current.previos.next = current.next;
-		current.next.previos = current.previos;
-	    }
-	    current.previos = null;
-	    current.next = null;
-	    current.data = null;
-	    size--;
-	    return true;
+	if (current.next != null && current.previos != null) {
+	    current.previos.next = current.next;
+	    current.next.previos = current.previos;
 	}
+	current.previos = null;
+	current.next = null;
+	current.data = null;
+	size--;
+	return true;
     }
 
     @Override
@@ -260,5 +266,5 @@ public class LinkedList<T> implements List<T> {
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
-
+    // -------------
 }

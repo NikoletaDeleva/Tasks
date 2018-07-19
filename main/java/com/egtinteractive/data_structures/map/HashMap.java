@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class HashMap<K, V> implements Map<K, V> {
-
+    // -------------Fields
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private int size;
@@ -12,6 +12,9 @@ public class HashMap<K, V> implements Map<K, V> {
     private final float loadFactor;
     private Node<K, V>[] table;
 
+    // -------------
+    
+    // ------------- Node Inner class
     static class Node<K, V> {
 	private final K key;
 	private V value;
@@ -41,6 +44,9 @@ public class HashMap<K, V> implements Map<K, V> {
 
     }
 
+    // -------------
+    
+    // ------------- Constructors
     public HashMap() {
 	this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
@@ -65,6 +71,9 @@ public class HashMap<K, V> implements Map<K, V> {
 	}
     }
 
+    // -------------
+    
+    // ------------- Private Methods
     private int hash(K key) {
 	return key.hashCode() % table.length;
     }
@@ -131,7 +140,9 @@ public class HashMap<K, V> implements Map<K, V> {
 	    previous.next = newNode;
 	}
     }
+    // -------------
 
+    // ------------- Methods from Interface
     @Override
     public V get(K key) {
 	int hash = hash(key);
@@ -332,4 +343,5 @@ public class HashMap<K, V> implements Map<K, V> {
 	return check;
 
     }
+    // -------------
 }
