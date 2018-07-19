@@ -4,9 +4,8 @@ import java.util.UUID;
 
 import com.egtinteractive.data_structures.map.Map;
 
-public class TestMap implements ITestMap {
+public class TestMap {
 
-    @Override
     public void fillMap(final Map<Integer, String> map,  int randSize) {
 	for (int index = 0; index < randSize; index++) {
 	    final String randValue = UUID.randomUUID().toString();

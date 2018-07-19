@@ -1,8 +1,9 @@
 package com.egtinteractive.data_structures.map_tests;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.testng.Assert.assertNotEquals;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -17,10 +18,29 @@ public class PutTest extends TestMap {
     }
 
     @Test(dataProvider = "maps")
-    public void putKeyValueTest(final Map<Integer, String> map) {
-	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
-	
-	fillMap(map, randSize);
+    public void putKeyValueTest(final Map<UUID, UUID> map) {
+	UUID randomKey = UUID.randomUUID();
+	UUID randomValue = UUID.randomUUID();
+	map.put(randomKey, UUID.randomUUID());
+	UUID value = map.get(randomKey);
+	map.put(randomKey, randomValue);
+	assertNotEquals(randomValue, value);
 
+    }
+
+    @Test(dataProvider = "maps")
+    public void putNullValueTest(final Map<UUID, UUID> map) {
+	UUID randomKey = UUID.randomUUID();
+	UUID nullValue = null;
+	map.put(randomKey, nullValue);
+	assertNull(nullValue);
+    }
+
+    @Test(dataProvider = "maps")
+    public void putNullKeyTest(final Map<UUID, UUID> map) {
+	UUID nullKey = null;
+	UUID randomValue = UUID.randomUUID();
+	map.put(nullKey, randomValue);
+	assertNull(nullKey);
     }
 }

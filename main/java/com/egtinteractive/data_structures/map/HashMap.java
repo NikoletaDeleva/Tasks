@@ -3,8 +3,6 @@ package com.egtinteractive.data_structures.map;
 import java.util.Iterator;
 import java.util.Objects;
 
-import com.egtinteractive.data_structures.map.HashMap.Node;
-
 public class HashMap<K, V> implements Map<K, V> {
     // -------------Fields
     private static final int DEFAULT_CAPACITY = 16;
@@ -80,7 +78,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	if (key == null) {
 	    return 0;
 	} else {
-	    return key.hashCode() % table.length;
+	    return key.hashCode() & (table.length-1);
 	}
     }
 
@@ -117,7 +115,6 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private void putValue(K key, V value) {
-
 	int hash = hash(key);
 
 	Node<K, V> newNode = new Node<K, V>(key, value);
@@ -157,9 +154,8 @@ public class HashMap<K, V> implements Map<K, V> {
 	} else {
 	    Node<K, V> temp = table[hash];
 	    while (temp != null) {
-		if (temp.key.equals(key)) {
+		if (Objects.equals(temp.key, key)) {
 		    return temp.value;
-
 		}
 		temp = temp.next;
 	    }
@@ -185,9 +181,9 @@ public class HashMap<K, V> implements Map<K, V> {
 	    Node<K, V> previous = null;
 	    Node<K, V> current = table[hash];
 
-	    while (current != null) { // we have reached last entry node of bucket.
-		if (current.key.equals(key)) {
-		    if (previous == null) { // delete first entry node.
+	    while (current != null) {
+		if (Objects.equals(current.key, key)) {
+		    if (previous == null) {
 			table[hash] = table[hash].next;
 			size--;
 			return current.value;
@@ -310,11 +306,23 @@ public class HashMap<K, V> implements Map<K, V> {
 	    Node<K, V> next = itr.next();
 	    K nextKey = next.key;
 	    V nextValue = next.value;
+
+	    int hashKey;
+	    int hashValue;
+
 	    if (nextKey == null) {
-		
+		hashKey = 0;
+	    } else {
+		hashKey = Objects.hashCode(nextKey);
 	    }
-	    
-	    hash = Objects.hashCode(next.key) + Objects.hashCode(next.value);
+
+	    if (nextValue == null) {
+		hashValue = 0;
+	    } else {
+		hashValue = Objects.hashCode(nextValue);
+	    }
+
+	    hash = hashKey + hashValue;
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
