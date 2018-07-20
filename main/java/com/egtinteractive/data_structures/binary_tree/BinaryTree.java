@@ -111,6 +111,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	    }
 	    return null;
 	}
+
     }
 
     private int size;
@@ -120,7 +121,6 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	if (node == null) {
 	    return false;
 	}
-
 	if (node.data.compareTo(element) == 0) {
 	    return true;
 	} else {
@@ -140,15 +140,15 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	if (element == null) {
 	    throw new NullPointerException("Can not add null element!");
 	}
-	if (exists(element, root)) {
-	    return;
-	}
 	if (root == null) {
 	    this.root = new Node<T>(element);
-	} else {
-	    root.insert(element);
+	    size++;
 	}
-	size++;
+	if (!exists(element, root)) {
+	    root.insert(element);
+	    size++;
+	}
+
     }
 
     @Override
@@ -326,35 +326,5 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	return iterator;
     }
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((root == null) ? 0 : root.hashCode());
-	result = prime * result + size;
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-	if (o == this)
-	    return true;
-	if (!(o instanceof Tree))
-	    return false;
-	int size = size();
-	if (size != ((BinaryTree<?>) o).size())
-	    return false;
-
-	Iterator<T> itr1 = iterator();
-	Iterator<?> itr2 = ((Tree<?>) o).iterator();
-
-	while (--size >= 0) {
-	    if (!itr1.next().equals(itr2.next())) {
-		return false;
-	    }
-
-	}
-	return true;
-    }
 
 }

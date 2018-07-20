@@ -16,7 +16,7 @@ public class SizeTest {
     }
 
     @Test(dataProvider = "trees")
-    public void SizeTest(final BinaryTree<Integer> tree) {
+    public void sizeTest(final BinaryTree<Integer> tree) {
 	final int size = ThreadLocalRandom.current().nextInt(1,100);
 	
 	for(int index = 0; index< size; index++) {

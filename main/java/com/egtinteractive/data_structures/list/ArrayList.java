@@ -1,7 +1,6 @@
 package com.egtinteractive.data_structures.list;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
@@ -156,11 +155,7 @@ public class ArrayList<T> implements List<T> {
 
 	    @Override
 	    public T next() {
-		if (hasNext()) {
-		    return array[index++];
-		} else {
-		    throw new NoSuchElementException();
-		}
+		return array[++index];
 	    }
 
 	    @Override
@@ -180,7 +175,7 @@ public class ArrayList<T> implements List<T> {
 	if (!(o instanceof List))
 	    return false;
 	int size = size();
-	
+
 	@SuppressWarnings("unchecked")
 	List<T> temp = (List<T>) o;
 	if (size != temp.size())

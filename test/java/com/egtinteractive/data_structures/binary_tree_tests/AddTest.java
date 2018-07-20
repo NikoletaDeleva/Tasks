@@ -30,8 +30,8 @@ public class AddTest {
     @Test(dataProvider = "trees")
     public void addManyElement(final BinaryTree<Integer> tree) {
 
-	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
-	
+	final int randSize = ThreadLocalRandom.current().nextInt(1, 100);
+
 	for (int index = 0; index < randSize; index++) {
 	    final int randData = ThreadLocalRandom.current().nextInt();
 	    tree.add(randData);
@@ -42,5 +42,22 @@ public class AddTest {
 	assertEquals(randSize, realSize);
     }
 
+    @Test(dataProvider = "trees")
+    public void putShouldNotIncreaseSizeIfItemIsAlreadyPresent(final BinaryTree<Integer> tree) {
+	
+	final int size = ThreadLocalRandom.current().nextInt(1, 100);
+	for (int i = 0; i < size; i++) {
+	    tree.add(i);
+	}
+	final int treeExpectedSize = tree.size();
+
+	for (int i = 0; i < size; i++) {
+	    tree.add(i);
+	}
+	final int treeActualSize = tree.size();
+
+	assertEquals(treeActualSize, treeExpectedSize);
+
+    }
 
 }

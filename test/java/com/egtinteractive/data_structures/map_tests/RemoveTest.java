@@ -3,8 +3,6 @@ package com.egtinteractive.data_structures.map_tests;
 import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,7 +17,6 @@ public class RemoveTest {
     public Object[][] createData() {
 	return new Object[][] { { new HashMap<>() } };
     }
-    
 
     @Test(dataProvider = "maps")
     public void removeTest(final Map<Integer, String> map) {
@@ -34,24 +31,5 @@ public class RemoveTest {
 	assertEquals(map.size() + 1, size);
 	assertFalse(map.containsKey(keyNext));
     }
-    
-    @Test(dataProvider = "maps")
-    public void otherRemoveTest(final Map<Integer, String> map) {
-	List<Integer> keys = new ArrayList<>();
-	int count = 5000;
-	for (Integer i = 0; i < count; i++) {
-	    Integer key = i;
-	    keys.add(key);
-	    map.put(key, "" +i);
-	}
-	assertEquals(count, map.size());
 
-	for (Integer key : keys) {
-	    map.remove(key);
-	    count--;
-	    assertEquals(count, map.size());
-	}
-
-	
-    }
 }

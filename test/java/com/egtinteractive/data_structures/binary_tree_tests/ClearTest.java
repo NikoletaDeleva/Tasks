@@ -23,6 +23,5 @@ public class ClearTest {
 	tree.clear();
 	int newSize = tree.size();
 	Assert.assertNotEquals(someSize, newSize);
-
     }
 }
