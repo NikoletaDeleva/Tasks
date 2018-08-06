@@ -18,13 +18,14 @@ public class RemoveTest {
     @Test(dataProvider = "trees")
     public void f(final BinaryTree<Integer> tree) {
 	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
-
+	final int randNumb = ThreadLocalRandom.current().nextInt();
+	
 	for (int index = 0; index < randSize; index++) {
 	    final int randData = ThreadLocalRandom.current().nextInt();
 	    tree.add(randData);
 	}
 	
-	final int randNumb = ThreadLocalRandom.current().nextInt();
+	
 	
 	System.out.println(tree.size());
 	
@@ -32,9 +33,8 @@ public class RemoveTest {
 	
 	System.out.println(tree.size());
 	
-//	final int expectedSize = tree.size() - 1;
 	
-	tree.remove(randNumb);
+	System.out.println(tree.remove(randNumb));
 	System.out.println(tree.size());
 	
 	final int realSize = tree.size();
