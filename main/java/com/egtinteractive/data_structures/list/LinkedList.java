@@ -6,16 +6,12 @@ import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
 
-    @SuppressWarnings({ "unused" })
+   
     private static class Node<T> {
 	private T data;
 	private Node<T> next;
 	private Node<T> previos;
 
-	Node() {
-	    setData(null);
-	    setNext(null);
-	}
 
 	Node(final T element, Node<T> previos) {
 	    setData(element);
@@ -45,14 +41,6 @@ public class LinkedList<T> implements List<T> {
 	    this.data = element;
 	}
 
-	private T getData() {
-	    return this.data;
-	}
-
-	private Node<T> getPrevios() {
-	    return this.previos;
-	}
-
 	private void setPrevios(Node<T> previos) {
 	    this.previos = previos;
 	}
@@ -74,7 +62,7 @@ public class LinkedList<T> implements List<T> {
 
     private Node<T> iterateLinkedList(int index, Node<T> current) {
 	for (int position = 0; position < index; position++) {
-	    current = current.next;
+	    current = current.getNext();
 	}
 	return current;
     }
@@ -131,8 +119,8 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean remove(T element) {
-	if (this.contains(element)) {
-	    int index = indexOf(element);
+	int index = indexOf(element);
+	if (index != -1) {
 	    remove(index);
 	}
 	return false;
@@ -141,16 +129,19 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(int index) {
 	indexValidation(index);
-	Node<T> current = head;
-	current = iterateLinkedList(index, current);
-
-	if (current.next != null && current.previos != null) {
-	    current.previos.next = current.next;
-	    current.next.previos = current.previos;
+	
+	if (index == 0) {
+	    this.head = this.head.getNext();
+	    size--;
+	    return true;
 	}
-	current.previos = null;
-	current.next = null;
-	current.data = null;
+	
+	Node<T> current = this.head;
+	current = iterateLinkedList(index-1, current);
+
+	final Node<T> nextNode = current.getNext().getNext();
+	current.setNext(nextNode);
+	
 	size--;
 	return true;
     }
@@ -226,8 +217,7 @@ public class LinkedList<T> implements List<T> {
 	    return false;
 	int size = size();
 
-	@SuppressWarnings("unchecked")
-	List<T> temp = (List<T>) o;
+	List<?> temp = (List<?>) o;
 	if (size != temp.size())
 	    return false;
 
@@ -247,7 +237,7 @@ public class LinkedList<T> implements List<T> {
 	Iterator<T> itr = iterator();
 	int hash = 0;
 	while (itr.hasNext()) {
-	    hash = Objects.hashCode(itr.next());
+	    hash += Objects.hashCode(itr.next());
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }

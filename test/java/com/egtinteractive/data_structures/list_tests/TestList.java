@@ -9,7 +9,7 @@ public class TestList {
 
     public void fillListWithIntegers(int size, List<Integer> list) {
 	for (int index = 0; index < size; index++) {
-	    list.add(ThreadLocalRandom.current().nextInt());
+	    list.add(ThreadLocalRandom.current().nextInt(1,100));
 	}
     }
 

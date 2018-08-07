@@ -18,9 +18,9 @@ public class LowerTest {
 
     @Test(dataProvider = "trees")
     public void emptyTree(final BinaryTree<Integer> tree) {
-	final Object expected = null;
+	final Integer expected = null;
 
-	final Object actual = tree.lower(ThreadLocalRandom.current().nextInt());
+	final Integer actual = tree.lower(ThreadLocalRandom.current().nextInt(1,100));
 
 	assertEquals(expected, actual);
     }

@@ -1,6 +1,7 @@
 package com.egtinteractive.data_structures.list;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
@@ -23,11 +24,11 @@ public class ArrayList<T> implements List<T> {
 	if (this.size < this.array.length) {
 	    return;
 	}
-	this.reSize();
+	this.resize();
     }
 
     @SuppressWarnings("unchecked")
-    private void reSize() {
+    private void resize() {
 	T[] temp = (T[]) new Object[this.array.length * 2];
 	this.copy(array, temp);
 	this.array = temp;
@@ -117,14 +118,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean contains(T element) {
-	if (size != 0) {
-	    for (int index = 0; index < this.size; index++) {
-		if (Objects.equals(this.array[index], element)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+	return indexOfElement(element) != -1;
     }
 
     @Override
@@ -137,16 +131,17 @@ public class ArrayList<T> implements List<T> {
 	return this.size;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void clear() {
-	this.array = null;
+	this.array = (T[]) new Object[this.array.length];
 	this.size = 0;
     }
 
     @Override
     public Iterator<T> iterator() {
 	final Iterator<T> iterator = new Iterator<T>() {
-	    private int index = 0;
+	    private int index = -1;
 
 	    @Override
 	    public boolean hasNext() {
@@ -155,7 +150,11 @@ public class ArrayList<T> implements List<T> {
 
 	    @Override
 	    public T next() {
-		return array[++index];
+		if (hasNext()) {
+		    return array[++index];
+		} else {
+		    throw new NoSuchElementException();
+		}
 	    }
 
 	    @Override
@@ -174,10 +173,9 @@ public class ArrayList<T> implements List<T> {
 	    return true;
 	if (!(o instanceof List))
 	    return false;
-	int size = size();
+	int size = this.size;
 
-	@SuppressWarnings("unchecked")
-	List<T> temp = (List<T>) o;
+	List<?> temp = (List<?>) o;
 	if (size != temp.size())
 	    return false;
 
@@ -188,7 +186,6 @@ public class ArrayList<T> implements List<T> {
 	    if (!Objects.equals(itr1.next(), itr2.next())) {
 		return false;
 	    }
-
 	}
 	return true;
     }
@@ -198,7 +195,7 @@ public class ArrayList<T> implements List<T> {
 	Iterator<T> itr = iterator();
 	int hash = 0;
 	while (itr.hasNext()) {
-	    hash = Objects.hashCode(itr.next());
+	    hash += Objects.hashCode(itr.next());
 	}
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }

@@ -1,6 +1,8 @@
 package com.egtinteractive.data_structures.list_tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -33,4 +35,32 @@ public class RemoveTest extends TestList {
 	assertEquals(sizeAfterRemoving, expectedSize);
     }
     
+    @Test(dataProvider = "lists")
+    public void removeElelmentSecond(final List<Integer> list) {
+	final int size = ThreadLocalRandom.current().nextInt(1,100);
+
+	fillListWithIntegers(size, list);
+
+	final int randInt = ThreadLocalRandom.current().nextInt(1000,2000);
+	list.add(randInt);
+	
+	list.remove(list.size() - 1);
+	
+	assertFalse(list.contains(randInt));
+	
+    }
+    
+
+    @Test(dataProvider = "lists")
+    public void removeElelmentThird(final List<Integer> list) {
+	final int size = ThreadLocalRandom.current().nextInt(1,100);
+
+	fillListWithIntegers(size, list);
+
+	int first = list.get(0);
+	list.remove(0);
+	int newFirst = list.get(0);
+	assertNotEquals(first, newFirst);
+	
+    }
 }

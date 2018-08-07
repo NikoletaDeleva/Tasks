@@ -17,7 +17,6 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	final T data;
 	private Node<T> leftChild;
 	private Node<T> rightChild;
-	private Node<T> parent;
 
 	public Node(final T data) {
 	    this.data = data;
@@ -45,156 +44,56 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	    }
 	}
 
-	public boolean remove(T element) {
-
-	    if (data.compareTo(element) < 0) {
-		if (leftChild != null) {
-		    return leftChild.remove(element);
+	public boolean remove(T element, Node<T> node) {
+	    if (data.compareTo(element) > 0) {
+		if (node.leftChild != null) {
+		    return node.leftChild.remove(element, node.leftChild);
 		} else {
 		    return false;
 		}
-	    } else if (data.compareTo(element) > 0) {
-		if (rightChild != null) {
-		    return rightChild.remove(element);
+	    } else if (data.compareTo(element) < 0) {
+		if (node.rightChild != null) {
+		    return node.rightChild.remove(element, node.rightChild);
 		} else {
 		    return false;
 		}
 	    } else {
-		if (leftChild == null && rightChild == null) {
-		    if (parent.leftChild.data.compareTo(element) == 0) {
-			parent.leftChild = null;
-		    } else if (parent.rightChild.data.compareTo(element) == 0) {
-			parent.rightChild = null;
-		    }
+		if (node.leftChild == null && node.rightChild == null) {
+		    node = null;
 		    return true;
-		} else if (rightChild == null) {
-		    if (parent.data.compareTo(leftChild.data) > 0) {
-			parent.leftChild = leftChild;
-			leftChild.parent = parent;
-			leftChild = null;
-			parent = null;
-		    } else {
-			parent.rightChild = leftChild;
-			leftChild.parent = parent;
-			leftChild = null;
-			parent = null;
-		    }
+		} else if (node.rightChild == null) {
+		    node = node.leftChild;
 		    return true;
 		} else if (leftChild == null) {
-		    if (parent.data.compareTo(rightChild.data) < 0) {
-			parent.rightChild = rightChild;
-			rightChild.parent = parent;
-			rightChild = null;
-			parent = null;
-		    } else {
-			parent.leftChild = rightChild;
-			leftChild.parent = leftChild;
-			leftChild = null;
-			parent = null;
-		    }
+		    node = node.rightChild;
 		    return true;
 		} else {
-		    if (parent.data.compareTo(rightChild.data) < 0) {
-			parent.rightChild = rightChild;
-		    } else {
-			parent.leftChild = rightChild;
-		    }
-
 		    Node<T> smallest = smallest(rightChild);
-		    leftChild.parent = smallest;
 		    smallest.leftChild = leftChild;
 		    return true;
 		}
 	    }
 	}
 
-	// if (data.compareTo(element) == 0) {
-	// if (leftChild == null && rightChild == null) {
-	// if (parent.leftChild.data.compareTo(element) == 0) {
-	// parent.leftChild = null;
-	// } else if (parent.rightChild.data.compareTo(element) == 0) {
-	// parent.rightChild = null;
-	// }
-	// return true;
-	// } else {
-	// if (leftChild == null) {
-	// if (parent.data.compareTo(rightChild.data) < 0) {
-	// parent.rightChild = rightChild;
-	// rightChild.parent = parent;
-	// rightChild = null;
-	// parent = null;
-	// } else {
-	// parent.leftChild = rightChild;
-	// leftChild.parent = leftChild;
-	// leftChild = null;
-	// parent = null;
-	// }
-	// return true;
-	// } else if (rightChild == null) {
-	//
-	// if (parent.data.compareTo(leftChild.data) > 0) {
-	// parent.leftChild = leftChild;
-	// leftChild.parent = parent;
-	// leftChild = null;
-	// parent = null;
-	// } else {
-	// parent.rightChild = leftChild;
-	// leftChild.parent = parent;
-	// leftChild = null;
-	// parent = null;
-	// }
-	// return true;
-	// } else {
-	// if (parent.data.compareTo(rightChild.data) < 0) {
-	// parent.rightChild = rightChild;
-	// } else {
-	// parent.leftChild = rightChild;
-	// }
-	//
-	// Node<T> smallest = smallest(rightChild);
-	// leftChild.parent = smallest;
-	// smallest.leftChild = leftChild;
-	// }
-	// return true;
-	// }
-	//
-	// } else {
-	// if (data.compareTo(element) < 0) {
-	// if (leftChild != null) {
-	// return leftChild.remove(element);
-	// } else {
-	// return false;
-	// }
-	// } else if (data.compareTo(element) > 0) {
-	// if (rightChild != null) {
-	// return rightChild.remove(element);
-	// } else {
-	// return false;
-	// }
-	// }
-	// }
-	// return false;
-   
-
-    private Node<T> smallest(Node<T> node) {
-	if (leftChild == null) {
-	    return node;
-	} else {
-	    smallest(node.leftChild);
+	private Node<T> smallest(Node<T> node) {
+	    if (node == null) {
+		return null;
+	    } else if (node.leftChild == null) {
+		return node;
+	    }
+	    return node.leftChild;
 	}
-	return null;
-    }
 
-    private Node<T> biggest(Node<T> node) {
-	if (rightChild == null) {
-	    return node;
-	} else {
-	    biggest(node.rightChild);
+	private Node<T> biggest(Node<T> node) {
+	    if (node == null) {
+		return null;
+	    } else if (node.rightChild == null) {
+		return node;
+	    }
+	    return biggest(node.rightChild);
 	}
-	return null;
-    }
 
-}
+    }
 
     private boolean validation(Node<T> node) {
 	return node == null;
@@ -236,22 +135,21 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	if (validation(root)) {
 	    return false;
 	}
-
-	int sizeBefore = this.size();
-
-	if (!root.remove(element)) {
+	if (!root.remove(element, root)) {
 	    return false;
+	} else {
+	    this.size--;
+	    return true;
 	}
-
-	size--;
-	return true;
     }
 
     @Override
     public T lower(T element) {
 	validateElement(element);
 	Node<T> newNode = lower(root, element);
-	validation(newNode);
+	if (validation(newNode)) {
+	    return null;
+	}
 	if (newNode.data.equals(element)) {
 	    return null;
 	}
@@ -259,9 +157,11 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     private Node<T> lower(Node<T> node, T element) {
-	validation(node);
-	int compare = element.compareTo(node.data);
-	if (compare <= 0) {
+	if (validation(node)) {
+	    return null;
+	}
+	int compare = node.data.compareTo(element);
+	if (compare >= 0) {
 	    return lower(node.leftChild, element);
 	}
 
@@ -277,7 +177,9 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     public T higher(T element) {
 	validateElement(element);
 	Node<T> newNode = higher(root, element);
-	validation(newNode);
+	if (validation(newNode)) {
+	    return null;
+	}
 	if (newNode.data.equals(element)) {
 	    return null;
 	}
@@ -285,7 +187,9 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     private Node<T> higher(Node<T> node, T element) {
-	validation(node);
+	if (validation(node)) {
+	    return null;
+	}
 	int compare = element.compareTo(node.data);
 	if (compare >= 0) {
 	    return higher(node.rightChild, element);
@@ -302,16 +206,16 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public T pollFirst() {
 	T info;
-	validation(root);
+	if (validation(root)) {
+	    return null;
+	}
 	if (root.leftChild == null) {
 	    info = root.data;
-	    root.rightChild.parent = null;
 	    root = root.rightChild;
 	} else {
 	    Node<T> smallest = root.smallest(root);
 	    info = smallest.data;
-	    smallest.parent = null;
-	    smallest.parent.leftChild = null;
+	    smallest = null;
 	}
 	size--;
 	return info;
@@ -320,16 +224,16 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public T pollLast() {
 	T info;
-	validation(root);
+	if (validation(root)) {
+	    return null;
+	}
 	if (root.rightChild == null) {
 	    info = root.data;
-	    root.leftChild.parent = null;
 	    root = root.leftChild;
 	} else {
 	    Node<T> biggest = root.biggest(root);
 	    info = biggest.data;
-	    biggest.parent = null;
-	    biggest.parent.rightChild = null;
+	    biggest = null;
 	}
 	size--;
 	return info;

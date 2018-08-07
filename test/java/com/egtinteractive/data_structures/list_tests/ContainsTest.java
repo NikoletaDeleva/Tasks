@@ -1,5 +1,6 @@
 package com.egtinteractive.data_structures.list_tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.UUID;
@@ -36,8 +37,8 @@ public class ContainsTest extends TestList{
 	
 	fillListWithIntegers(size, list);
 	
-	final int notExisting = ThreadLocalRandom.current().nextInt(100,1000);
-	assertTrue(!list.contains(notExisting));
+	final int notExisting = ThreadLocalRandom.current().nextInt(500,1000);
+	assertFalse(list.contains(notExisting));
     }
 
     @Test(dataProvider = "lists")
