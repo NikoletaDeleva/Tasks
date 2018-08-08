@@ -23,11 +23,11 @@ public class IndexOfTest extends TestList {
 
 	fillListWithIntegers(size, list);
 
-	list.set(1, 30);
+	list.set(0, 30);
 	list.set(30, 30);
 
 	final int actualPosition = list.indexOf(30);
-	final int expectedPosition = 1;
+	final int expectedPosition = 0;
 
 	assertEquals(actualPosition, expectedPosition);
 

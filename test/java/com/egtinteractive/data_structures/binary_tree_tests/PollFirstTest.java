@@ -1,11 +1,11 @@
 package com.egtinteractive.data_structures.binary_tree_tests;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -32,13 +32,22 @@ public class PollFirstTest {
 
     @Test(dataProvider = "trees")
     public void binaryTreePollSecondTest(final BinaryTree<Integer> tree) {
-	int size = ThreadLocalRandom.current().nextInt(1, 20);
+	final int size = ThreadLocalRandom.current().nextInt(1,100);
 	List<Integer> list = new ArrayList<>();
-	for (int i = 0; i < size; i++) {
-	    tree.add(ThreadLocalRandom.current().nextInt(1, 10));
+	for (int index = 0; index < size; index++) {
+	    final int num = ThreadLocalRandom.current().nextInt(1,150);
+	    tree.add(num);
+	    list.add(num);
 	}
-	tree.pollFirst();
-	assertNotEquals(list.size(), tree.size());
+	
+	list = list.stream().distinct().collect(Collectors.toList());
+
+	for (int index = 0; index < tree.size(); index++) {
+	    tree.pollFirst();
+	    list.remove(0);
+
+	}
+	assertEquals(tree.size(), list.size());
 
     }
 }

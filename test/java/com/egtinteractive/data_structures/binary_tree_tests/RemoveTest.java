@@ -18,41 +18,34 @@ public class RemoveTest {
 
     @Test(dataProvider = "trees")
     public void f(final BinaryTree<Integer> tree) {
-	final int randSize = ThreadLocalRandom.current().nextInt(1,10);
-	final int randNumb = ThreadLocalRandom.current().nextInt(0,100);
-	
+	final int randSize = ThreadLocalRandom.current().nextInt(1, 10);
+	final int randNumb = ThreadLocalRandom.current().nextInt(100, 200);
+
 	for (int index = 0; index < randSize; index++) {
-	    final int randData = ThreadLocalRandom.current().nextInt(0,100);
+	    final int randData = ThreadLocalRandom.current().nextInt(0, 100);
 	    tree.add(randData);
 	}
-	
-	
-	
-	System.out.println(tree.size());
-	
+
+	final int treeSize = tree.size();
+
 	tree.add(randNumb);
-	
-	System.out.println(tree.size());
-	
-	boolean a = tree.remove(randNumb);
-	System.out.println(a);
-	System.out.println(tree.size());
-	
+
+	tree.remove(randNumb);
+
 	final int realSize = tree.size();
-	System.out.println(realSize);
-	
-	assertEquals(randSize, realSize);
+
+	assertEquals(treeSize, realSize);
     }
-    
+
     @Test(dataProvider = "trees")
     public void second(final BinaryTree<Integer> tree) {
-	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
-	
+	final int randSize = ThreadLocalRandom.current().nextInt(1, 100);
+
 	for (int index = 0; index < randSize; index++) {
-	    final int randData = ThreadLocalRandom.current().nextInt(0,100);
+	    final int randData = ThreadLocalRandom.current().nextInt(0, 100);
 	    tree.add(randData);
 	}
-	
-	assertFalse(tree.remove(ThreadLocalRandom.current().nextInt(-100,0)));
+
+	assertFalse(tree.remove(ThreadLocalRandom.current().nextInt(-100, 0)));
     }
 }

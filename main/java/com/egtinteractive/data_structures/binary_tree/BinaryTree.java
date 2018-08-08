@@ -84,15 +84,6 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	    return node.leftChild;
 	}
 
-	private Node<T> biggest(Node<T> node) {
-	    if (node == null) {
-		return null;
-	    } else if (node.rightChild == null) {
-		return node;
-	    }
-	    return biggest(node.rightChild);
-	}
-
     }
 
     private boolean validation(Node<T> node) {
@@ -205,38 +196,46 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public T pollFirst() {
-	T info;
 	if (validation(root)) {
 	    return null;
 	}
-	if (root.leftChild == null) {
-	    info = root.data;
-	    root = root.rightChild;
-	} else {
-	    Node<T> smallest = root.smallest(root);
-	    info = smallest.data;
-	    smallest = null;
+	return pollFirst(this.root, null);
+    }
+
+    private T pollFirst(final Node<T> node, final Node<T> parentNode) {
+	if (node.leftChild == null) {
+	    if (parentNode == null) {
+		this.root = node.rightChild;
+	    } else {
+		parentNode.leftChild = node.rightChild;
+	    }
+	    this.size--;
+	    return node.data;
+
 	}
-	size--;
-	return info;
+	return pollFirst(node.leftChild, node);
     }
 
     @Override
     public T pollLast() {
-	T info;
 	if (validation(root)) {
 	    return null;
 	}
-	if (root.rightChild == null) {
-	    info = root.data;
-	    root = root.leftChild;
-	} else {
-	    Node<T> biggest = root.biggest(root);
-	    info = biggest.data;
-	    biggest = null;
+	return pollLast(this.root, null);
+    }
+
+    private T pollLast(final Node<T> node, final Node<T> parentNode) {
+	if (node.rightChild == null) {
+	    if (parentNode == null) {
+		this.root = node.leftChild;
+	    } else {
+		parentNode.rightChild = node.leftChild;
+	    }
+	    this.size--;
+	    return node.data;
+
 	}
-	size--;
-	return info;
+	return pollLast(node.rightChild, node);
     }
 
     @Override
