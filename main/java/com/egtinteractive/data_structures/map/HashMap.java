@@ -31,12 +31,20 @@ public class HashMap<K, V> implements Map<K, V> {
 	    return next;
 	}
 
+	public void setNext(Node<K, V> next) {
+	    this.next = next;
+	}
+
 	public K getKey() {
 	    return key;
 	}
 
-	public Object getValue() {
+	public V getValue() {
 	    return value;
+	}
+
+	public void setValue(final V value) {
+	    this.value = value;
 	}
 
     }
@@ -60,7 +68,6 @@ public class HashMap<K, V> implements Map<K, V> {
 		this.loadFactor = loadFactor;
 		this.table = new Node[capacity];
 		this.threshold = (int) (table.length * loadFactor);
-
 	    }
 	}
     }
@@ -69,18 +76,13 @@ public class HashMap<K, V> implements Map<K, V> {
 	if (key == null) {
 	    return 0;
 	} else {
-	    return key.hashCode() & (table.length - 1);
+	    return Math.abs(key.hashCode() % table.length);
 	}
     }
 
     private void checkSize() {
-	int current = 0;
-	for (int index = 0; index < table.length; index++) {
-	    if (table[index] != null) {
-		current++;
-	    }
-	}
-	if (current > threshold) {
+
+	if (threshold == size) {
 	    resize();
 	}
 
@@ -88,51 +90,54 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @SuppressWarnings("unchecked")
     private void resize() {
-
 	Node<K, V>[] temp = new Node[this.table.length * 2];
-	this.copy(table, temp);
+	this.copy(temp);
 	this.table = temp;
 	threshold = (int) (table.length * loadFactor);
 
     }
 
-    private void copy(Object[] src, Object[] dest) {
-	if (dest.length < src.length) {
-	    throw new RuntimeException(src + " cannot be copied into " + dest);
+    private void copy(Node<K, V>[] dest) {
+	if (dest.length < table.length) {
+	    throw new RuntimeException(table + " cannot be copied into " + dest);
 	}
-	for (int index = 0; index < src.length; index++) {
-	    dest[index] = src[index];
+	this.size = 0;
+	for (int index = 0; index < table.length; index++) {
+	    Node<K, V> node = table[index];
+	    while (node != null) {
+		putValue(node.getKey(), node.getValue(), dest);
+		node = node.getNext();
+	    }
 	}
     }
 
-    private void putValue(K key, V value) {
-	int hash = hash(key);
+    @Override
+    public V put(K key, V value) {
+	checkSize();
+	putValue(key, value, table);
+	return value;
+    }
 
-	Node<K, V> newNode = new Node<K, V>(key, value);
-
+    private void putValue(K key, V value, Node<K, V>[] table) {
+	final int hash = hash(key);
 	if (table[hash] == null) {
-	    table[hash] = newNode;
-	} else {
-	    Node<K, V> previous = null;
-	    Node<K, V> current = table[hash];
-
-	    while (current != null) {
-		if (current.key.equals(key)) {
-		    if (previous == null) {
-			newNode.next = current.next;
-			table[hash] = newNode;
-			return;
-		    } else {
-			newNode.next = current.next;
-			previous.next = newNode;
-			return;
-		    }
-		}
-		previous = current;
-		current = current.next;
-	    }
-	    previous.next = newNode;
+	    table[hash] = new Node<K, V>(key, value);
+	    size++;
+	    return;
 	}
+
+	Node<K, V> current = table[hash];
+	Node<K,V> prev = null;
+	while (current != null) {
+	    if (Objects.equals(current.getKey(), key)) {
+		current.setValue(value);
+		return;
+	    }
+	    prev = current;
+	    current = current.getNext();
+	}
+	prev.setNext(new Node<K, V>(key, value));
+	size++;
     }
 
     @Override
@@ -146,18 +151,10 @@ public class HashMap<K, V> implements Map<K, V> {
 		if (Objects.equals(temp.key, key)) {
 		    return temp.value;
 		}
-		temp = temp.next;
+		temp = temp.getNext();
 	    }
 	    return null;
 	}
-    }
-
-    @Override
-    public V put(K key, V value) {
-	checkSize();
-	putValue(key, value);
-	size++;
-	return value;
     }
 
     @Override
@@ -167,23 +164,22 @@ public class HashMap<K, V> implements Map<K, V> {
 	if (table[hash] == null) {
 	    return null;
 	} else {
-	    Node<K, V> previous = null;
 	    Node<K, V> current = table[hash];
-
+	    Node<K, V> previous = null;
 	    while (current != null) {
 		if (Objects.equals(current.key, key)) {
 		    if (previous == null) {
-			table[hash] = table[hash].next;
+			table[hash] = current.getNext();
 			size--;
-			return current.value;
-		    } else {
-			previous.next = current.next;
-			size--;
-			return current.value;
+			return current.getValue();
 		    }
+		    final V value = current.getValue();
+		    current = current.getNext();
+		    size--;
+		    return value;
 		}
 		previous = current;
-		current = current.next;
+		current = current.getNext();
 	    }
 	    return null;
 	}
@@ -316,36 +312,29 @@ public class HashMap<K, V> implements Map<K, V> {
 	return 7 * Objects.hashCode(size) + 11 * hash;
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
+    public boolean equals(Object o) {
+	if (o == this)
 	    return true;
-	}
-	if (obj == null) {
+	if (!(o instanceof Map))
 	    return false;
-	}
-	if (!(obj instanceof HashMap)) {
+	int size = size();
+	if (size != ((Map<?, ?>) o).size())
 	    return false;
-	}
 
-	@SuppressWarnings("unchecked")
-	HashMap<K, V> newMap = (HashMap<K, V>) obj;
-	if (size != newMap.size) {
-	    return false;
-	}
+	Iterator<Node<K, V>> itr1 = iterator();
+	Iterator<Node<?, ?>> itr2 = ((Map) o).iterator();
 
-	boolean check = true;
+	while (--size >= 0) {
+	    Node<K, V> myCurrEntry = itr1.next();
+	    Node<?, ?> otherCurrEntry = itr2.next();
+	    if (!Objects.equals(myCurrEntry.getKey(), otherCurrEntry.getKey())
+		    || !Objects.equals(myCurrEntry.getValue(), otherCurrEntry.getValue())) {
+		return false;
 
-	Iterator<Node<K, V>> newItr = newMap.iterator();
-
-	while (newItr.hasNext()) {
-	    if (this.containsKey((K) newItr.next().key) && (containsValue((V) newItr.next().value))) {
-		check = true;
-	    } else {
-		check = false;
 	    }
 	}
-	return check;
+
+	return true;
     }
 }
