@@ -96,7 +96,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean remove(T element) {
+    public boolean remove(final T element) {
 	int index = indexOfElement(element);
 	if (index == -1) {
 	    return false;
@@ -105,7 +105,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean remove(int index) {
+    public boolean remove(final int index) {
 	indexValidation(index);
 	if (index != --size) {
 	    for (int pos = index; pos < size; pos++) {

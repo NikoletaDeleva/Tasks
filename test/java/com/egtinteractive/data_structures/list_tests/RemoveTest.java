@@ -2,6 +2,7 @@ package com.egtinteractive.data_structures.list_tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,13 +21,15 @@ public class RemoveTest extends TestList {
 
     @Test(dataProvider = "lists")
     public void removeElelmentAndSizeDecrase(final List<Integer> list) {
-	final int size = ThreadLocalRandom.current().nextInt(1,100);
+	final int size = ThreadLocalRandom.current().nextInt(1,20);
 
 	fillListWithIntegers(size, list);
 
 	final int sizeBeforeRemoveElement = list.size();
-
-	list.remove(list.get(ThreadLocalRandom.current().nextInt(0,size)));
+	
+	Integer getElement =list.get( ThreadLocalRandom.current().nextInt(0,size));
+	boolean isTrue = list.remove(getElement);
+	assertTrue(isTrue);
 
 	final int sizeAfterRemoving = list.size();
 	final int expectedSize = sizeBeforeRemoveElement - 1;
@@ -43,7 +46,7 @@ public class RemoveTest extends TestList {
 	final int randInt = ThreadLocalRandom.current().nextInt(1000,2000);
 	list.add(randInt);
 	
-	list.remove(list.size() - 1);
+	assertTrue(list.remove(list.size() - 1));
 	
 	assertFalse(list.contains(randInt));
 	
@@ -61,7 +64,7 @@ public class RemoveTest extends TestList {
 	list.set(0, firstElement);
 	list.set(1, secondElement);
 	
-	list.remove(0);
+	assertTrue(list.remove(0));
 	int newFirst = list.get(0);
 	assertEquals(secondElement, newFirst);
 	

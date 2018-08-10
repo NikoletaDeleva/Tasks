@@ -6,12 +6,10 @@ import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
 
-   
     private static class Node<T> {
 	private T data;
 	private Node<T> next;
 	private Node<T> previos;
-
 
 	Node(final T element, Node<T> previos) {
 	    setData(element);
@@ -120,28 +118,28 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(T element) {
 	int index = indexOf(element);
-	if (index != -1) {
-	    remove(index);
+	if (index == -1) {
+	    return false;
 	}
-	return false;
+	return remove(index);
     }
 
     @Override
     public boolean remove(int index) {
 	indexValidation(index);
-	
+
 	if (index == 0) {
 	    this.head = this.head.getNext();
 	    size--;
 	    return true;
 	}
-	
+
 	Node<T> current = this.head;
-	current = iterateLinkedList(index-1, current);
+	current = iterateLinkedList(index - 1, current);
 
 	final Node<T> nextNode = current.getNext().getNext();
 	current.setNext(nextNode);
-	
+
 	size--;
 	return true;
     }
@@ -154,11 +152,12 @@ public class LinkedList<T> implements List<T> {
     @Override
     public int indexOf(T element) {
 	if (this.size != 0) {
+	    Node<T> currentNode = this.head;
 	    for (int pos = 0; pos < size; pos++) {
-		T currentNode = get(pos);
-		if (Objects.equals(currentNode, element)) {
+		if (Objects.equals(currentNode.data, element)) {
 		    return pos;
 		}
+		currentNode = currentNode.getNext();
 	    }
 	}
 	return -1;

@@ -72,17 +72,16 @@ public class HashMap<K, V> implements Map<K, V> {
 	}
     }
 
-    private int hash(K key) {
+    private int hash(K key, int tableLenght) {
 	if (key == null) {
 	    return 0;
 	} else {
-	    return Math.abs(key.hashCode() % table.length);
+	    return Math.abs(key.hashCode() % tableLenght);
 	}
     }
 
     private void checkSize() {
-
-	if (threshold == size) {
+	if (this.threshold == this.size) {
 	    resize();
 	}
 
@@ -93,7 +92,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	Node<K, V>[] temp = new Node[this.table.length * 2];
 	this.copy(temp);
 	this.table = temp;
-	threshold = (int) (table.length * loadFactor);
+	this.threshold = (int) (table.length * loadFactor);
 
     }
 
@@ -119,47 +118,50 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private void putValue(K key, V value, Node<K, V>[] table) {
-	final int hash = hash(key);
-	if (table[hash] == null) {
-	    table[hash] = new Node<K, V>(key, value);
+	final int hash = hash(key, table.length);
+	final Node<K, V> newNode = new Node<>(key, value);
+
+	Node<K, V> current = table[hash];
+
+	if (current == null) {
+	    table[hash] = newNode;
 	    size++;
 	    return;
 	}
 
-	Node<K, V> current = table[hash];
-	Node<K,V> prev = null;
-	while (current != null) {
+	while (current.getNext() != null) {
 	    if (Objects.equals(current.getKey(), key)) {
 		current.setValue(value);
 		return;
 	    }
-	    prev = current;
 	    current = current.getNext();
 	}
-	prev.setNext(new Node<K, V>(key, value));
+
+	if (Objects.equals(current.getKey(), key)) {
+	    current.setValue(value);
+	    return;
+	}
+	current.setNext(newNode);
 	size++;
     }
 
     @Override
     public V get(K key) {
-	int hash = hash(key);
-	if (table[hash] == null) {
-	    return null;
-	} else {
-	    Node<K, V> temp = table[hash];
-	    while (temp != null) {
-		if (Objects.equals(temp.key, key)) {
-		    return temp.value;
-		}
-		temp = temp.getNext();
+	int hash = hash(key, table.length);
+
+	Node<K, V> temp = table[hash];
+	while (temp != null) {
+	    if (Objects.equals(temp.key, key)) {
+		return temp.value;
 	    }
-	    return null;
+	    temp = temp.getNext();
 	}
+	return null;
     }
 
     @Override
     public V remove(K key) {
-	int hash = hash(key);
+	int hash = hash(key, table.length);
 
 	if (table[hash] == null) {
 	    return null;
@@ -188,7 +190,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-	final int index = hash(key);
+	final int index = hash(key, table.length);
 	Node<K, V> temp = table[index];
 	while (temp != null) {
 	    if (Objects.equals(temp.getKey(), key)) {
@@ -196,7 +198,6 @@ public class HashMap<K, V> implements Map<K, V> {
 	    }
 	    temp = temp.getNext();
 	}
-
 	return false;
     }
 
@@ -211,7 +212,6 @@ public class HashMap<K, V> implements Map<K, V> {
 		temp = temp.getNext();
 	    }
 	}
-
 	return false;
     }
 

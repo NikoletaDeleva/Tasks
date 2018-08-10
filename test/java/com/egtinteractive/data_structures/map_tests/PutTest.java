@@ -48,19 +48,22 @@ public class PutTest extends TestMap {
 
     @Test(dataProvider = "maps")
     public void putTest(final Map<String, Integer> map) {
-	final Integer firstValue = ThreadLocalRandom.current().nextInt(1, 100);
+	final Integer firstValue = ThreadLocalRandom.current().nextInt(201, 500);
 	final String first = String.valueOf(firstValue);
-
+	System.out.println(first);
+	map.put(first, firstValue);
 	
-	for (int index = 0; index < 11130; index++) {
+	for (int index = 0; index < 200; index++) {
 	    String str =String.valueOf(index);
 	    
 	    map.put(str, index);
 	}
-	map.put(first, firstValue);
-	final Integer real = map.get(first);
 	
-	assertEquals(map.size(), 11130);
+	
+	final Integer real = map.get(first);
+
 	assertEquals(real, firstValue);
+	assertEquals(map.size(), 201);
+	
     }
 }
