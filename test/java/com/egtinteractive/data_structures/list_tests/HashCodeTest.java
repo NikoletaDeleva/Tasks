@@ -34,16 +34,5 @@ public class HashCodeTest extends TestList {
 	Assert.assertEquals(result, result2);
     }
     
-    @Test(dataProvider = "lists")
-    public void hashCodeShouldReturnDifferentResultForListsWithSlightlyDifferentElements(List<String> listFirst,
-	    List<String> listSecond) {
-	int size = ThreadLocalRandom.current().nextInt(1,100);
-	
-	fillListWithStrings(size, listFirst);
-	fillListWithStrings(size, listSecond);
-	
-	final int result = listFirst.hashCode();
-	final int result2 = listSecond.hashCode();
-	Assert.assertNotEquals(result, result2);
-    }
+
 }

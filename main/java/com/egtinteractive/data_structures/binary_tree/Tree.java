@@ -1,8 +1,6 @@
 package com.egtinteractive.data_structures.binary_tree;
 
-import java.util.Iterator;
-
-public interface Tree<T> {
+public interface Tree<T> extends Iterable<T> {
     public void add(T element);
 
     public boolean remove(T element);
@@ -18,10 +16,4 @@ public interface Tree<T> {
     public int size();
 
     public void clear();
-
-    public Iterator<T> iterator();
-
-    public boolean equals(Object otherObject);
-
-    public int hashCode();
 }

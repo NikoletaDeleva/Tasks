@@ -21,12 +21,12 @@ public class GetTest extends TestMap {
     @Test(dataProvider = "maps")
     public void getValueByKeyShouldReturnTrue(final Map<Integer, String> map) {
 
-	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
+	final int randSize = ThreadLocalRandom.current().nextInt(1, 100);
 
 	fillMap(map, randSize);
 
 	final String expectedValue = UUID.randomUUID().toString();
-	final int randKey = ThreadLocalRandom.current().nextInt(1, randSize);
+	final int randKey = ThreadLocalRandom.current().nextInt(0, map.size() - 1);
 
 	map.put(randKey, expectedValue);
 
@@ -37,13 +37,13 @@ public class GetTest extends TestMap {
 
     @Test(dataProvider = "maps")
     public void getNullKey(final Map<Integer, String> map) {
-	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
+	final int randSize = ThreadLocalRandom.current().nextInt(1, 100);
 
 	fillMap(map, randSize);
-	
+
 	map.put(null, null);
-	
+
 	assertTrue(map.get(null) == null);
     }
-    
+
 }

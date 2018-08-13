@@ -1,9 +1,14 @@
 package com.egtinteractive.data_structures.binary_tree_tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -47,5 +52,37 @@ public class RemoveTest {
 	}
 
 	assertFalse(tree.remove(ThreadLocalRandom.current().nextInt(-100, 0)));
+    }
+
+    @Test(dataProvider = "trees")
+    public void treeTest(final BinaryTree<Integer> tree) {
+	final int size = ThreadLocalRandom.current().nextInt(100, 500);
+	List<Integer> list = new ArrayList<>();
+
+	for (int i = 0; i < size; i++) {
+	    final int number = ThreadLocalRandom.current().nextInt(100, 1000);
+	    list.add(number);
+	    tree.add(number);
+	}
+	list = list.stream().distinct().sorted((x, y) -> x.compareTo(y)).collect(Collectors.toList());
+
+	for (int i = 0; i < 10; i++) {
+	    final int index = ThreadLocalRandom.current().nextInt(0, list.size());
+	    int a = list.remove(index);
+	    System.out.println(a);
+	    System.out.println(tree.remove(a));
+	}
+
+	assertEquals(list.size(), tree.size());
+
+	Collections.sort(list);
+	Iterator<Integer> listIter = list.iterator();
+	Iterator<Integer> treeIter = tree.iterator();
+
+	while (treeIter.hasNext() && listIter.hasNext()) {
+	    assertEquals(treeIter.next(), listIter.next());
+
+	}
+
     }
 }

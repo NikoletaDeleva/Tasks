@@ -1,7 +1,6 @@
 package com.egtinteractive.data_structures.list;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class LinkedList<T> implements List<T> {
@@ -117,6 +116,9 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean remove(T element) {
+	if (this.head == null) {
+	    return false;
+	}
 	int index = indexOf(element);
 	if (index == -1) {
 	    return false;
@@ -135,8 +137,9 @@ public class LinkedList<T> implements List<T> {
 	}
 
 	Node<T> current = this.head;
-	current = iterateLinkedList(index - 1, current);
-
+	for (int i = 0; i < index - 1; i++) {
+	    current = current.getNext();
+	}
 	final Node<T> nextNode = current.getNext().getNext();
 	current.setNext(nextNode);
 
@@ -176,36 +179,47 @@ public class LinkedList<T> implements List<T> {
 
     }
 
-    @Override
     public Iterator<T> iterator() {
-	final Iterator<T> iterator = new Iterator<T>() {
-	    private Node<T> current = head;
-	    private int previous = 0;
+	return new ListIterator();
+    }
 
-	    @Override
-	    public boolean hasNext() {
-		return current != null;
+    private class ListIterator implements Iterator<T> {
+
+	private Node<T> currNode;
+	private Node<T> parentNode;
+
+	public ListIterator() {
+	    currNode = new Node<>(null, null);
+	    currNode.setNext(head);
+
+	}
+
+	@Override
+	public boolean hasNext() {
+	    return currNode.next != null;
+	}
+
+	@Override
+	public T next() {
+	    parentNode = currNode;
+	    currNode = currNode.next;
+	    return (T) currNode.data;
+	}
+
+	@Override
+	public void remove() {
+	    if (currNode == null || parentNode == null) {
+		throw new IllegalStateException("Node not found");
 	    }
+	    if (currNode == head) {
+		head = head.next;
 
-	    @Override
-	    public T next() {
-		if (hasNext()) {
-		    T data = current.data;
-		    current = current.next;
-		    previous++;
-		    return data;
-		}
-		throw new NoSuchElementException("No such element!");
 	    }
+	    parentNode.setNext(currNode.getNext());
+	    size--;
 
-	    @Override
-	    public void remove() {
-		LinkedList.this.remove(--previous);
-		size--;
-	    }
+	}
 
-	};
-	return iterator;
     }
 
     @Override

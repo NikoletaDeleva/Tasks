@@ -14,7 +14,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     private static class Node<T extends Comparable<T>> {
 
-	final T data;
+	T data;
 	private Node<T> leftChild;
 	private Node<T> rightChild;
 
@@ -43,47 +43,6 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 		return false;
 	    }
 	}
-
-	public boolean remove(T element, Node<T> node) {
-	    if (data.compareTo(element) > 0) {
-		if (node.leftChild != null) {
-		    return node.leftChild.remove(element, node.leftChild);
-		} else {
-		    return false;
-		}
-	    } else if (data.compareTo(element) < 0) {
-		if (node.rightChild != null) {
-		    return node.rightChild.remove(element, node.rightChild);
-		} else {
-		    return false;
-		}
-	    } else {
-		if (node.leftChild == null && node.rightChild == null) {
-		    node = null;
-		    return true;
-		} else if (node.rightChild == null) {
-		    node = node.leftChild;
-		    return true;
-		} else if (leftChild == null) {
-		    node = node.rightChild;
-		    return true;
-		} else {
-		    Node<T> smallest = smallest(rightChild);
-		    smallest.leftChild = leftChild;
-		    return true;
-		}
-	    }
-	}
-
-	private Node<T> smallest(Node<T> node) {
-	    if (node == null) {
-		return null;
-	    } else if (node.leftChild == null) {
-		return node;
-	    }
-	    return node.leftChild;
-	}
-
     }
 
     private boolean validation(Node<T> node) {
@@ -121,17 +80,54 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public boolean remove(T element) {
+    public boolean remove(final T element) {
 	validateElement(element);
 	if (validation(root)) {
 	    return false;
 	}
-	if (!root.remove(element, root)) {
-	    return false;
-	} else {
-	    this.size--;
+	final int beforeSize = this.size();
+	this.root = remove(element, this.root);
+	if (beforeSize != this.size()) {
+	    this.size = beforeSize - 1;
 	    return true;
 	}
+	return false;
+    }
+
+    private Node<T> remove(final T element, final Node<T> node) {
+
+	if (node == null) {
+	    return node;
+	}
+	final int compare = element.compareTo(node.data);
+	if (compare < 0) {
+	    node.leftChild = remove(element, node.leftChild);
+	} else if (compare > 0) {
+	    node.rightChild = remove(element, node.rightChild);
+	} else {
+	    this.size--;
+	    if (node.rightChild == null && node.leftChild == null) {
+		return null;
+	    } else if (node.rightChild == null) {
+		return node.leftChild;
+	    } else if (node.leftChild == null) {
+		return node.rightChild;
+	    } else {
+		node.data = smallest(node.rightChild);
+		node.rightChild = remove(node.data, node.rightChild);
+	    }
+	}
+	return node;
+
+    }
+
+    private T smallest(Node<T> root) {
+	T minValue = root.data;
+	while (root.leftChild != null) {
+	    minValue = root.leftChild.data;
+	    root = root.leftChild;
+	}
+	return minValue;
     }
 
     @Override
@@ -250,7 +246,6 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	this.size = 0;
     }
 
-    @Override
     public Iterator<T> iterator() {
 	return new BinaryTreeIterator();
     }
@@ -265,7 +260,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
 	@Override
 	public boolean hasNext() {
-	    return index < list.size() - 1;
+	    return index < list.size() -1;
 	}
 
 	@Override

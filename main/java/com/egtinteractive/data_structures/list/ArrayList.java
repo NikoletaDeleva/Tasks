@@ -138,7 +138,6 @@ public class ArrayList<T> implements List<T> {
 	this.size = 0;
     }
 
-    @Override
     public Iterator<T> iterator() {
 	final Iterator<T> iterator = new Iterator<T>() {
 	    private int index = -1;

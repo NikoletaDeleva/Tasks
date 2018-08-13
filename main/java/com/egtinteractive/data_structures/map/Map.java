@@ -1,6 +1,6 @@
 package com.egtinteractive.data_structures.map;
 
-public interface Map<K, V> {
+public interface Map<K, V> extends Iterable<HashMap.Node<K, V>>{
     public V get(K key);
 
     public V put(K key, V value);
@@ -15,9 +15,4 @@ public interface Map<K, V> {
 
     public void clear();
 
-    public java.util.Iterator<HashMap.Node<K, V>> iterator();
-
-    public boolean equals(Object otherObject);
-
-    public int hashCode();
 }

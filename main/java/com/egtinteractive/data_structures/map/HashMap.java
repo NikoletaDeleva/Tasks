@@ -230,7 +230,6 @@ public class HashMap<K, V> implements Map<K, V> {
 
     }
 
-    @Override
     public Iterator<Node<K, V>> iterator() {
 	final Iterator<Node<K, V>> iterator = new Iterator<Node<K, V>>() {
 

@@ -1,8 +1,6 @@
 package com.egtinteractive.data_structures.list;
 
-import java.util.Iterator;
-
-public interface List<T> {
+public interface List<T> extends Iterable<T>  {
     public T get(int index);
 
     public void add(T element);
@@ -22,11 +20,5 @@ public interface List<T> {
     public int size();
 
     public void clear();
-
-    public Iterator<T> iterator();
-
-    public boolean equals(Object otherObject);
-
-    public int hashCode();
 
 }
