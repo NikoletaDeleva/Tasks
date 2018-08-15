@@ -1,7 +1,6 @@
 package com.egtinteractive.data_structures.map_tests;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import java.util.concurrent.ThreadLocalRandom;
 

@@ -318,6 +318,7 @@ public class HashMap<K, V> implements Map<K, V> {
 	if (!(o instanceof Map))
 	    return false;
 	int size = size();
+	@SuppressWarnings("unchecked")
 	final Map<K, V> newMap = (Map<K, V>) o;
 	if (size != (newMap).size())
 	    return false;

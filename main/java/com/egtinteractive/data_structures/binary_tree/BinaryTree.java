@@ -306,6 +306,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	if (!(o instanceof Tree))
 	    return false;
 	int size = size();
+	@SuppressWarnings("unchecked")
 	Tree<T> newTree = (Tree<T>) o;
 
 	if (newTree.size() != size) {
