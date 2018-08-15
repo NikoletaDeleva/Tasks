@@ -59,18 +59,17 @@ public class RemoveTest {
 	final int size = ThreadLocalRandom.current().nextInt(100, 500);
 	List<Integer> list = new ArrayList<>();
 
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    final int number = ThreadLocalRandom.current().nextInt(100, 1000);
 	    list.add(number);
 	    tree.add(number);
 	}
 	list = list.stream().distinct().sorted((x, y) -> x.compareTo(y)).collect(Collectors.toList());
 
-	for (int i = 0; i < 10; i++) {
-	    final int index = ThreadLocalRandom.current().nextInt(0, list.size());
-	    int a = list.remove(index);
-	    System.out.println(a);
-	    System.out.println(tree.remove(a));
+	for (int index = 0; index < 10; index++) {
+	    final int pos = ThreadLocalRandom.current().nextInt(0, list.size());
+	    int a = list.remove(pos);
+	    tree.remove(a);
 	}
 
 	assertEquals(list.size(), tree.size());

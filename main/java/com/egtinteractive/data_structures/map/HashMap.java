@@ -12,7 +12,7 @@ public class HashMap<K, V> implements Map<K, V> {
     private final float loadFactor;
     private Node<K, V>[] table;
 
-    static class Node<K, V> {
+    public static class Node<K, V> {
 	private final K key;
 	private V value;
 	private Node<K, V> next;
@@ -318,19 +318,21 @@ public class HashMap<K, V> implements Map<K, V> {
 	if (!(o instanceof Map))
 	    return false;
 	int size = size();
-	if (size != ((Map<?, ?>) o).size())
+	final Map<K, V> newMap = (Map<K, V>) o;
+	if (size != (newMap).size())
 	    return false;
 
 	Iterator<Node<K, V>> itr1 = iterator();
-	Iterator<Node<?, ?>> itr2 = ((Map) o).iterator();
 
-	while (--size >= 0) {
-	    Node<K, V> myCurrEntry = itr1.next();
-	    Node<?, ?> otherCurrEntry = itr2.next();
-	    if (!Objects.equals(myCurrEntry.getKey(), otherCurrEntry.getKey())
-		    || !Objects.equals(myCurrEntry.getValue(), otherCurrEntry.getValue())) {
+	while (itr1.hasNext()) {
+	    final Node<K, V> myCurrEntry = itr1.next();
+	    
+	    if(!newMap.containsKey(myCurrEntry.getKey())) {
 		return false;
+	    }
 
+	    if (!Objects.equals(myCurrEntry.getValue(),newMap.get(myCurrEntry.getKey()) )) {
+		return false;
 	    }
 	}
 

@@ -47,18 +47,4 @@ public class IndexOfTest extends TestList {
 	assertEquals(expectedPosition, realPosition);
     }
 
-    @Test(dataProvider = "lists")
-    public void indexOfNonExistingElement(final List<Integer> list) {
-	final int size = ThreadLocalRandom.current().nextInt(0,100);
-
-	fillListWithIntegers(size, list);
-       //Should change it 
-	final int nonExistingElement = 100000;
-
-	final int realIndex = list.indexOf(nonExistingElement);
-	final int expectedIndex = -1;
-
-	assertEquals(realIndex, expectedIndex);
-
-    }
 }

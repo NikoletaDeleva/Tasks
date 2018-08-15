@@ -20,13 +20,13 @@ public class RemoveTest {
 
     @Test(dataProvider = "maps")
     public void removeOne(Map<Character, Integer> map) {
-	for (int i = 1; i < 20; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index < 20; index++) {
+	    map.put((char) index, index);
 	}
-	for (int i = 1; i < 20; i++) {
-	    map.remove((char) i);
-	    final boolean keyResult = map.containsKey((char) i);
-	    final boolean valueResult = map.containsValue(i);
+	for (int index = 1; index < 20; index++) {
+	    map.remove((char) index);
+	    final boolean keyResult = map.containsKey((char) index);
+	    final boolean valueResult = map.containsValue(index);
 	    assertFalse(keyResult);
 	    assertFalse(valueResult);
 	}
@@ -36,13 +36,13 @@ public class RemoveTest {
     @Test(dataProvider = "maps")
     public void removeTwo(Map<Character, Integer> map) {
 	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
-	for (int i = 1; i < size; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index < size; index++) {
+	    map.put((char) index, index);
 	}
 
 	int mapSize = map.size();
-	for (int i = 1; i < size; i++) {
-	    map.remove((char) i);
+	for (int index = 1; index < size; index++) {
+	    map.remove((char) index);
 	    assertEquals(map.size(), --mapSize);
 	}
     }
@@ -50,8 +50,8 @@ public class RemoveTest {
     @Test(dataProvider = "maps")
     public void removeThree(Map<Character, Integer> map) {
 	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
-	for (int i = 1; i < size; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index < size; index++) {
+	    map.put((char) index, index);
 	}
 	final Integer result = map.get((char) (size + 1));
 	assertNull(result);
@@ -60,14 +60,14 @@ public class RemoveTest {
     @Test(dataProvider = "maps")
     public void removeFour(Map<Character, Integer> map) {
 	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
-	for (int i = 1; i < size; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index < size; index++) {
+	    map.put((char) index, index);
 	}
 
 	final int secondSize = ThreadLocalRandom.current().nextInt(200, 250);
 	final int mapSize = map.size();
-	for (int i = size; i < secondSize; i++) {
-	    map.remove((char) i);
+	for (int index = size; index < secondSize; index++) {
+	    map.remove((char) index);
 	    final int result = map.size();
 	    assertEquals(result, mapSize);
 	}
@@ -76,13 +76,13 @@ public class RemoveTest {
     @Test(dataProvider = "maps")
     public void removeFive(Map<Character, Integer> map) {
 	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
-	for (int i = 1; i <= size; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index <= size; index++) {
+	    map.put((char) index, index);
 	}
 
-	for (int i = size; i >= 1; i--) {
-	    final int result = map.remove((char) i);
-	    assertEquals(result, i);
+	for (int index = size; index >= 1; index--) {
+	    final int result = map.remove((char) index);
+	    assertEquals(result, index);
 	}
     }
 
@@ -98,8 +98,8 @@ public class RemoveTest {
     @Test(dataProvider = "maps")
     public void removeSeven(Map<Character, Integer> map) {
 	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
-	for (int i = 1; i < size; i++) {
-	    map.put((char) i, i);
+	for (int index = 1; index < size; index++) {
+	    map.put((char) index, index);
 	}
 	final int num = ThreadLocalRandom.current().nextInt(2000);
 	map.put(null, num);
@@ -111,8 +111,8 @@ public class RemoveTest {
 
     @Test(dataProvider = "maps")
     public void removeEight(Map<String, Integer> map) {
-	for (int i = 1; i < 10; i++) {
-	    map.put(String.valueOf(i), i);
+	for (int index = 1; index < 10; index++) {
+	    map.put(String.valueOf(index), index);
 	}
 
 	final int result = map.remove("9");
@@ -124,8 +124,8 @@ public class RemoveTest {
 
     @Test(dataProvider = "maps")
     public void removeNine(Map<Character, Integer> map) {
-	for (int i = 0; i < 100; i += 16) {
-	    map.put((char) i, i);
+	for (int index = 0; index < 100; index += 16) {
+	    map.put((char) index, index);
 	}
 
 	final int result = map.remove((char) 96);

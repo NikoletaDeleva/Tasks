@@ -25,7 +25,7 @@ public class HigherTest {
     }
 
     @Test(dataProvider = "trees")
-    public void lowerThanShouldReturnTrue(final BinaryTree<Integer> tree) {
+    public void lowerTwo(final BinaryTree<Integer> tree) {
 
 	final int randSize = ThreadLocalRandom.current().nextInt(1,100);
 

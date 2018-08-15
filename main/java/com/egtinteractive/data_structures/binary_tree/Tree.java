@@ -16,4 +16,6 @@ public interface Tree<T> extends Iterable<T> {
     public int size();
 
     public void clear();
+    
+    public boolean contains(T e);
 }

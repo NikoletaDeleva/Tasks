@@ -55,13 +55,13 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	}
     }
 
-    private void оrder(final Node<T> node, final List<T> list) {
+    private void order(final Node<T> node, final List<T> list) {
 	if (node == null) {
 	    return;
 	}
-	оrder(node.leftChild, list);
+	order(node.leftChild, list);
 	list.add(node.data);
-	оrder(node.rightChild, list);
+	order(node.rightChild, list);
 
     }
 
@@ -255,12 +255,12 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 	private int index = -1;
 
 	public BinaryTreeIterator() {
-	    оrder(root, list);
+	    order(root, list);
 	}
 
 	@Override
 	public boolean hasNext() {
-	    return index < list.size() -1;
+	    return index < list.size() - 1;
 	}
 
 	@Override
@@ -278,24 +278,50 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
+    public boolean contains(T element) {
+	if (element == null) {
+	    return false;
+	}
+	return contains(element, root);
+    }
+
+    private boolean contains(T element, Node<T> node) {
+	if (node == null) {
+	    return false;
+	}
+
+	if (element.compareTo(node.data) < 0) {
+	    return contains(element, node.leftChild);
+	} else if (element.compareTo(node.data) > 0) {
+	    return contains(element, node.rightChild);
+	} else {
+	    return true;
+	}
+    }
+
+    @Override
     public boolean equals(Object o) {
 	if (o == this)
 	    return true;
 	if (!(o instanceof Tree))
 	    return false;
 	int size = size();
-	if (size != ((BinaryTree<?>) o).size())
+	Tree<T> newTree = (Tree<T>) o;
+
+	if (newTree.size() != size) {
 	    return false;
+	}
 
-	Iterator<T> itrOne = iterator();
-	Iterator<?> itrTwo = ((Tree<?>) o).iterator();
+	Iterator<T> itr = newTree.iterator();
 
-	while (--size >= 0) {
-	    if (!itrOne.next().equals(itrTwo.next())) {
+	while (itr.hasNext()) {
+	    final T current = itr.next();
+
+	    if (!contains(current)) {
 		return false;
 	    }
-
 	}
+
 	return true;
     }
 

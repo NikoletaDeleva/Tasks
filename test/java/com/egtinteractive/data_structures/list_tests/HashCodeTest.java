@@ -18,8 +18,8 @@ public class HashCodeTest extends TestList {
     }
 
     @Test(dataProvider = "lists")
-    public void hashCodeShouldReturnEqualResultForListsWithSameElements(List<String> listFirst, List<String> listSecond) {
-	for (int i = 0; i < 100; i++) {
+    public void hashCodeTest(List<String> listFirst, List<String> listSecond) {
+	for (int index = 0; index < 100; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    listFirst.add(String.valueOf(num));
 	    listSecond.add(String.valueOf(num));

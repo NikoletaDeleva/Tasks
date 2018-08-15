@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.util.UUID;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,14 +19,15 @@ public class EqualsTest {
     }
 
     @Test(dataProvider = "maps")
-    public void equalsTest(final Map<Integer, String> map) {
-	HashMap<Integer, String> hashMap = new HashMap<>();
-	HashMap<Integer, String> newHashMap = new HashMap<>();
+    public void equalsTest(final Map<String, String> map) {
+	HashMap<String, String> hashMap = new HashMap<>();
+	HashMap<String, String> newHashMap = new HashMap<>();
 
-	for (int i = 0; i < 10; i++) {
-	    map.put(i, "" + i + 1);
-	    hashMap.put(i, "" + i + 1);
-	    newHashMap.put(i, "" + i + 1);
+	for (int index = 0; index < 10; index++) {
+	    final String randString = UUID.randomUUID().toString();
+	    map.put(randString, "" + index + 1);
+	    hashMap.put(randString, "" + index + 1);
+	    newHashMap.put(randString, "" + index + 1);
 	}
 
 	assertTrue(map.equals(map));

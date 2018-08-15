@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
-
     private T[] array;
     private int size = 0;
     public static final int DEFAULT_SIZE = 20;

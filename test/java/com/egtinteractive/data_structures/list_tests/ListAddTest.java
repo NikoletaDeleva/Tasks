@@ -41,7 +41,7 @@ public class ListAddTest extends TestList {
     }
 
     @Test(dataProvider = "lists")
-    public void addNullValue_ShouldContainsNull(List<Integer> list) {
+    public void addNullValue(List<Integer> list) {
 	list.add(ThreadLocalRandom.current().nextInt());
 	list.add(null);
 	list.add(ThreadLocalRandom.current().nextInt());

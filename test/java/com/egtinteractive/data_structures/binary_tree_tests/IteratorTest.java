@@ -19,10 +19,10 @@ public class IteratorTest {
     }
 
     @Test(dataProvider = "trees")
-    public void iteratorShouldReturnOrderedSet(final BinaryTree<Integer> tree) {
+    public void iteratorTestTwo(final BinaryTree<Integer> tree) {
 	final int size = ThreadLocalRandom.current().nextInt(100,1000);
 	List<Integer> list = new ArrayList<>();
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    tree.add(num);
 	    list.add(num);
@@ -31,11 +31,11 @@ public class IteratorTest {
 	final StringBuilder treeSb = new StringBuilder();
 	final StringBuilder listSb = new StringBuilder();
 
-	for (int i : tree) {
-	    treeSb.append(i);
+	for (int index : tree) {
+	    treeSb.append(index);
 	}
-	for (int i : list) {
-	    listSb.append(i);
+	for (int index : list) {
+	    listSb.append(index);
 	}
 
 	final boolean result = treeSb.toString().equals(listSb.toString());
@@ -44,9 +44,9 @@ public class IteratorTest {
     }
 
     @Test(dataProvider = "trees")
-    public void iteratorShouldRemove(final BinaryTree<Integer> tree) {
+    public void iteratorTestOne(final BinaryTree<Integer> tree) {
 	final int size = ThreadLocalRandom.current().nextInt(100,1000);
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    tree.add(num);
 	}
@@ -61,10 +61,10 @@ public class IteratorTest {
     }
 
     @Test(dataProvider = "trees")
-    public void iteratorShouldNextRemoveAndNextCorrectly(final BinaryTree<Integer> tree) {
+    public void iteratorTest(final BinaryTree<Integer> tree) {
 	final int size = ThreadLocalRandom.current().nextInt(100,1000);
 	List<Integer> list = new ArrayList<>();
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    tree.add(num);
 	    list.add(num);

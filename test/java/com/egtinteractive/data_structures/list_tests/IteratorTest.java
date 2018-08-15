@@ -25,7 +25,7 @@ public class IteratorTest extends TestList {
     @Test(dataProvider = "lists")
     public void testIteratorAfterClear(final List<String> list) {
 	int size = ThreadLocalRandom.current().nextInt(1, 100);
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    list.add(UUID.randomUUID().toString());
 	}
 	list.clear();
@@ -38,33 +38,34 @@ public class IteratorTest extends TestList {
 	fillListWithStrings(size, list);
 	assertTrue(list.iterator().hasNext());
     }
+
     @Test(dataProvider = "lists")
-    public void shouldIterateCorrectly(List<Integer> list) {
-	final int size = ThreadLocalRandom.current().nextInt(100,1000);
+    public void iteratorFour(List<Integer> list) {
+	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
 	int[] arr = new int[size];
-	for (int i = 0; i < size; i++) {
+	for (int index = 0; index < size; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    list.add(num);
-	    arr[i] = num;
+	    arr[index] = num;
 	}
 
 	int[] resultArray = new int[size];
 	int count = 0;
-	for (int i : list) {
-	    resultArray[count++] = i;
+	for (int index : list) {
+	    resultArray[count++] = index;
 	}
 
-	for (int i = 0; i < size; i++) {
-	    assertEquals(resultArray[i], arr[i]);
+	for (int index = 0; index < size; index++) {
+	    assertEquals(resultArray[index], arr[index]);
 	}
     }
 
     @Test(dataProvider = "lists")
-    public void shouldNotDoAnythingOnAnEmptyList(List<Integer> list) {
+    public void iteratorThree(List<Integer> list) {
 
 	int result = 0;
-	for (int i : list) {
-	    result += i;
+	for (int index : list) {
+	    result += index;
 	}
 
 	Assert.assertEquals(result, 0);
@@ -72,9 +73,9 @@ public class IteratorTest extends TestList {
     }
 
     @Test(dataProvider = "lists")
-    public void shouldRemoveCorrectly(List<Integer> list) {
-	final int size = ThreadLocalRandom.current().nextInt(100,1000);
-	for (int i = 0; i < size; i++) {
+    public void iteratorTwo(List<Integer> list) {
+	final int size = ThreadLocalRandom.current().nextInt(100, 1000);
+	for (int index = 0; index < size; index++) {
 	    final int num = ThreadLocalRandom.current().nextInt();
 	    list.add(num);
 	}
@@ -91,9 +92,9 @@ public class IteratorTest extends TestList {
     }
 
     @Test(dataProvider = "lists")
-    public void shouldRemoveAllCorrectly(List<Integer> list) {
-	for (int i = 0; i < 10; i++) {
-	    list.add(i);
+    public void iteratorOne(List<Integer> list) {
+	for (int index = 0; index < 10; index++) {
+	    list.add(index);
 	}
 	Iterator<Integer> iterator = list.iterator();
 	while (iterator.hasNext()) {

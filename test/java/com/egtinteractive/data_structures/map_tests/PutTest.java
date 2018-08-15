@@ -50,20 +50,18 @@ public class PutTest extends TestMap {
     public void putTest(final Map<String, Integer> map) {
 	final Integer firstValue = ThreadLocalRandom.current().nextInt(201, 500);
 	final String first = String.valueOf(firstValue);
-	System.out.println(first);
 	map.put(first, firstValue);
-	
+
 	for (int index = 0; index < 200; index++) {
-	    String str =String.valueOf(index);
-	    
+	    String str = String.valueOf(index);
+
 	    map.put(str, index);
 	}
-	
-	
+
 	final Integer real = map.get(first);
 
 	assertEquals(real, firstValue);
 	assertEquals(map.size(), 201);
-	
+
     }
 }
